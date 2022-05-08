@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using MailKitExtensions;
+using MailKitExtensions.Sender;
 
 namespace Zue.MailKitExtensions.UnitTesting
 {
     public class MailKitSenderTests
     {
+        private readonly EmailSender _email =
+            new EmailSender("smtp.gmail.com");
+
         [Fact]
         public void Test1()
         {
-            var email = Email
+            var email = _email
                 .From("test")
                 .To("test")
                 .Subject("Hi")
@@ -22,12 +26,11 @@ namespace Zue.MailKitExtensions.UnitTesting
         [Fact]
         public async Task Test2()
         {
-            var email = Email
+            var email = _email
                 .From("test")
                 .To("test")
                 .Subject("Hi")
                 .Body("~");
-            Email.SmtpHost = "myHost";
             await email.SendAsync();
             Assert.Equal("~", email.Message.Body);
         }
